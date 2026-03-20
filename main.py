@@ -3,7 +3,17 @@ import time
 
 index = [
     {
-        "name": "Slag",
+        "name": "Dodge",
+        "damage": 0,
+        "cost": 7
+    },
+    {
+        "name": "Gräva efter Guld",
+        "damage": 0,
+        "cost": -10
+    },
+    {
+        "name": "Slap",
         "damage": 5,
         "cost": 0
     },
@@ -23,17 +33,49 @@ index = [
         "cost": 10
     },
     {
-        "name": "Epstein",
+        "name": "kys",
         "damage": 1000000,
         "cost": 67  
     },
 ]
 
-stålar = 20
+pekomon=[
+    {
+        "name": "pikaong",
+        "hp": 40,
+        "attacks": [
+            {"name": "Dhunder shock", "power": 20},
+            {"name": "dih", "power": 25}
+        ],
+    },
+    {
+        "name": "Hjalmar",
+        "hp": 67,
+        "attacks": [
+            {"name": "Flex Muscle", "power": 67},
+            {"name": "cykel", "power": 10}
+        ],
+    },
+    {
+        "name": "Bulba-MAN",
+        "hp": 150,
+        "attacks": [
+            {"name": "Overgrow", "power": -10},
+            {"name": "Sallad dih", "power": 49}
+        ],
+    },
+]
+
+monster = random.choice(pekomon)
+stålar = 0
 hp_player = 100
-hp_monster = 100
+hp_monster = {monster['hp']}
 
 print("--- FIGHT START ---")
+
+print(f"A wild {monster['name']} appeared!")
+print(f"HP: {monster['hp']}")
+
 while hp_player > 0 and hp_monster > 0:
     choice_input = input("Vilken attack vill du använda? ").strip()
     
@@ -41,15 +83,20 @@ while hp_player > 0 and hp_monster > 0:
     for a in index:
         if a["name"].lower() == choice_input.lower():
             attack = a
-            break
     
     if attack:
         if attack["cost"] <= stålar:
-            skada = attack["damage"]
-            hp_monster -= skada
+            crit_player = random.randint(1,10)
             stålar -= attack["cost"]
-            time.sleep(1)
-            print(f"Du använder {attack['name']}! Monstern tar [{skada}] skada.")
+            skada = attack["damage"]
+            if crit_player == 10:
+                skada *= 2
+            if skada<0:
+                hp_player -= skada
+                print(f"Du använder {skada}! Du Healar [{skada}] skada.")
+            else:
+                hp_monster -= skada
+                print(f"Du använder {skada}! Monstern tar [{skada}] skada.")
         else:
             time.sleep(0.5)
             print(f"Hell nah fattig-lap! Glömt hur många stålar du har, hmm? Du har bara [{stålar}] stålar polarn.")
@@ -59,10 +106,18 @@ while hp_player > 0 and hp_monster > 0:
         print(f"Ogiltig attack: '{choice_input}'. Försök igen.")
 
     if hp_monster > 0:
-        dmg_monster = random.randint(5, 15)
-        hp_player -= dmg_monster
-        time.sleep(0.5)
-        print(f"Monstret biter dig! Du tar [{dmg_monster}] skada.")
+        if attack["name"]=="Dodge":
+            print("Wowswers skidido du Dodgade och tog inge damage!")
+        else:
+            dmg_monster = monster["attack"]["power"]
+            crit_monster = random.randint(1,10)
+            if crit_monster == 10:
+                hp_player -= dmg_monster*2
+                print(f"Monstret CRIT-ar dig! Du tar [{dmg_monster*2}] skada.")
+            else:
+                hp_player -= dmg_monster
+                time.sleep(0.5)
+                print(f"Monstret biter dig! Du tar [{dmg_monster}] skada.")
     
     stålar += 10
     time.sleep(1)
