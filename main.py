@@ -69,7 +69,7 @@ pekomon=[
 monster = random.choice(pekomon)
 stålar = 0
 hp_player = 100
-hp_monster = {monster['hp']}
+hp_monster = monster['hp']
 
 print("--- FIGHT START ---")
 
@@ -106,10 +106,10 @@ while hp_player > 0 and hp_monster > 0:
         print(f"Ogiltig attack: '{choice_input}'. Försök igen.")
 
     if hp_monster > 0:
-        if attack["name"]=="Dodge":
+        if attack and attack["name"] == "Dodge":
             print("Wowswers skidido du Dodgade och tog inge damage!")
         else:
-            dmg_monster = monster["attack"]["power"]
+            dmg_monster = monster["attacks"]["power"]
             crit_monster = random.randint(1,10)
             if crit_monster == 10:
                 hp_player -= dmg_monster*2
